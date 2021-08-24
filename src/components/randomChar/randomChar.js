@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-
+import gotService from '../../services/gotService';
+import Spinner from '../spinner';
+import ErrorMessage from '../errorMessage';
 
 import styled from 'styled-components';
 
@@ -29,30 +31,80 @@ const Term = styled.span`
 
 export default class RandomChar extends Component {
 
+    constructor() {
+        super();
+        this.updateChar();
+    }
+
+    gotService = new gotService();
+    state = {
+        char: {},
+        loading: true,
+        error: false
+    }
+
+    onCharLoaded = (char) => {
+        this.setState({
+            char,
+            loading: false
+        })
+    }
+
+    onError = (err) => {
+        this.setState({
+            error: true,
+            loading: false
+        })
+    }
+
+    updateChar() {
+        // const id = 130000000;
+        const id = Math.floor(Math.random()*300 + 25); // 25-140
+        this.gotService.getCharacters(id)
+            .then(this.onCharLoaded)
+            .catch(this.onError);
+    }
+
     render() {
+        const {char, loading, error} = this.state;
+
+        const errorMessage = error ? <ErrorMessage/> : null;
+        const spinner = loading ? <Spinner/> : null;
+        const content = (!loading || error) ? <View char={char}/> : null;
 
         return (
             <Block>
-                <H>Random Character: John</H>
-                <Ul>
-                    <Li>
-                        <Term>Gender </Term>
-                        <span>male</span>
-                    </Li>
-                    <Li>
-                        <Term>Born </Term>
-                        <span>11.03.1039</span>
-                    </Li>
-                    <Li>
-                        <Term>Died </Term>
-                        <span>13.09.1089</span>
-                    </Li>
-                    <Li>
-                        <Term>Culture </Term>
-                        <span>Anarchy</span>
-                    </Li>
-                </Ul>
+                {errorMessage}
+                {spinner}
+                {content}
             </Block>
         );
     }
+}
+
+const View = ({char}) => {
+    const {name, gender, born, died, culture} = char;
+    return (
+        <>
+            <H>Random Character: {name}</H>
+            <Ul>
+                <Li>
+                    <Term>Gender </Term>
+                    <span>{gender}</span>
+                </Li>
+                <Li>
+                    <Term>Born </Term>
+                    <span>{born}</span>
+                </Li>
+                <Li>
+                    <Term>Died </Term>
+                    <span>{died}</span>
+                </Li>
+                <Li>
+                    <Term>Culture </Term>
+                    <span>{culture}</span>
+                </Li>
+            </Ul>
+        </>
+    )
 }
