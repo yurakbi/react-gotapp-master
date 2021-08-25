@@ -1,34 +1,68 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {Col, Row, Container} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
-import ItemList from '../itemList';
-import CharDetails from '../charDetails';
+import ErrorMessage from '../errorMessage';
+import ToggleButton from 'reactstrap/lib/Button';
+import CharacterPage from '../characterPage';
 
+export default class App extends Component {
+    state = {
+        showrandomChar: true,
+        error: false
+    };
 
-const App = () => {
-    return (
-        <> 
-            <Container>
-                <Header />
-            </Container>
-            <Container>
-                <Row>
-                    <Col lg={{size: 5, offset: 0}}>
-                        <RandomChar/>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md='6'>
-                        <ItemList />
-                    </Col>
-                    <Col md='6'>
-                        <CharDetails />
-                    </Col>
-                </Row>
-            </Container>
-        </>
-    );
+    componentDidCatch(){
+        console.log('error');
+        this.setState({
+            error: true
+        })
+    }
+
+    toggleRandomChar = () => {
+        this.setState((state) => {
+            return {
+                showrandomChar: !state.showrandomChar
+            }
+        })
+    }
+
+    
+
+    render() {
+        if (this.state.error) {
+            return <ErrorMessage/>
+        }
+        const char = this.state.showrandomChar ? <RandomChar/> : null;
+
+        if(this.state.error) {
+            return <ErrorMessage/>
+        }
+        return (
+            <> 
+                <Container>
+                    <Header />
+                </Container>
+                <Container>
+                    <Row>
+                        <Col lg={{size: 5, offset: 0}}>
+                            {char}
+                            <ToggleButton
+                                className="mb-2"
+                                variant="primary"
+                                onClick={this.toggleRandomChar}
+                                >
+                                Toggle random character
+                            </ToggleButton>
+                        </Col>
+                    </Row>
+                    <CharacterPage/>
+                    <CharacterPage/>
+                    <CharacterPage/>
+                </Container>
+            </>
+        )
+
+    }
+    
 };
-
-export default App;

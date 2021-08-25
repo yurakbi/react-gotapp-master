@@ -31,16 +31,20 @@ const Term = styled.span`
 
 export default class RandomChar extends Component {
 
-    constructor() {
-        super();
-        this.updateChar();
-    }
-
     gotService = new gotService();
     state = {
         char: {},
         loading: true,
         error: false
+    }
+
+    componentDidMount() {
+        this.updateChar();
+        // this.timerId = setInterval(this.updateChar, 1500);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerId);
     }
 
     onCharLoaded = (char) => {
@@ -58,11 +62,13 @@ export default class RandomChar extends Component {
     }
 
     updateChar() {
-        // const id = 130000000;
-        const id = Math.floor(Math.random()*300 + 25); // 25-140
-        this.gotService.getCharacters(id)
+        const id = Math.floor(Math.random()*140 + 25); // 25-140
+        this.gotService
+            .getCharacters(id)
             .then(this.onCharLoaded)
             .catch(this.onError);
+        
+            
     }
 
     render() {

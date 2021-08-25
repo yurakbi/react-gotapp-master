@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import gotService from '../../services/gotService';
 
 import styled from 'styled-components';
 
@@ -31,27 +32,61 @@ const Er = styled.div `
     font-size: 26px;
 `
 export default class CharDetails extends Component {
+    gotService = new gotService();
+
+    state = {
+        char: null
+    }
+
+    componentDidMount() {
+        this.updateChar();
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.charId !== prevProps.charId) {
+            this.updateChar();
+        }
+    }
+
+    updateChar() {
+        const {charId} = this.props;
+        if(!charId) {
+            return;
+        }
+
+        this.gotService.getCharacters(charId)
+            .then((char) => {
+                this.setState({char})
+            })
+    }
 
     render() {
+
+        if(!this.state.char) {
+            return <Er> Please select a character</Er>
+        }
+
+        const {name, gender, born, died, culture} = this.state.char;
+
         return (
             <Char>
-                <H>John Snow</H>
+                <H>{name}</H>
                 <UList>
                     <List>
-                        <Term>Gender</Term>
+                        <Term>{gender}</Term>
                         <span>male</span>
                     </List>
                     <List>
                         <Term>Born</Term>
-                        <span>1783</span>
+                        <span>{born}</span>
                     </List>
                     <List>
                         <Term>Died</Term>
-                        <span>1820</span>
+                        <span>{died}</span>
                     </List>
                     <List>
                         <Term>Culture</Term>
-                        <span>First</span>
+                        <span>{culture}</span>
                     </List>
                 </UList>
             </Char>
