@@ -50,7 +50,8 @@ export default class RandomChar extends Component {
     onCharLoaded = (char) => {
         this.setState({
             char,
-            loading: false
+            loading: false,
+            
         })
     }
 
@@ -89,7 +90,10 @@ export default class RandomChar extends Component {
 }
 
 const View = ({char}) => {
-    const {name, gender, born, died, culture} = char;
+    const {name, gender, born, died, culture, nodata} = char;
+    if(char == null) {
+        char =  nodata;
+    }
     return (
         <>
             <H>Random Character: {name}</H>
