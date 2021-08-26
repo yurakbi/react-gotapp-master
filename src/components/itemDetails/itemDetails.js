@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import gotService from '../../services/gotService';
 
 import styled from 'styled-components';
 
@@ -32,11 +31,11 @@ const Er = styled.div `
     font-size: 26px;
 `
 
-const Field = ({char, field, label}) => {
+const Field = ({item, field, label}) => {
     return (
         <List>
             <Term>{label}</Term>
-            <span>{char[field]}</span>
+            <span>{item[field]}</span>
         </List>
     )
 
@@ -45,51 +44,49 @@ const Field = ({char, field, label}) => {
 export {
     Field
 }
-export default class CharDetails extends Component {
-    gotService = new gotService();
-
+export default class ItemDetails extends Component {
     state = {
-        char: null
+        item: null
     }
 
     componentDidMount() {
-        this.updateChar();
+        this.updateItem();
     }
 
     componentDidUpdate(prevProps) {
-        if(this.props.charId !== prevProps.charId) {
-            this.updateChar();
+        if (this.props.itemId !== prevProps.itemId) {
+            this.updateItem()
         }
+
     }
 
-    updateChar() {
-        const {charId} = this.props;
-        if(!charId) {
+    updateItem(){
+        const {itemId, getData} = this.props;
+        if (!itemId) {
             return;
         }
 
-        this.gotService.getCharacters(charId)
-            .then((char) => {
-                this.setState({char})
+        getData(itemId)
+            .then((item) =>{
+                this.setState({item})
             })
     }
+    
 
     render() {
-
-        if(!this.state.char) {
-            return <Er> Please select a character</Er>
+        if(!this.state.item) {
+            return<Er> Please select item in the list </Er>
         }
 
-        const {char} =this.state
-        const {name} = char;
-
+        const {item} = this.state;
+        const {name} = item;
         return (
             <Char>
                 <H>{name}</H>
                 <UList>
                    {
                    React.Children.map(this.props.children, (child) => {
-                    return React.cloneElement(child, {char})
+                    return React.cloneElement(child, {item})
                    })
                    }
                 </UList>

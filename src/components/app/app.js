@@ -5,6 +5,7 @@ import RandomChar from '../randomChar';
 import ErrorMessage from '../errorMessage';
 import ToggleButton from 'reactstrap/lib/Button';
 import CharacterPage from '../characterPage';
+import BooksPage from '../itemBooks/booksPage';
 import gotService from '../../services/gotService';
 
 
@@ -61,6 +62,7 @@ export default class App extends Component {
                         </Col>
                     </Row>
                     <CharacterPage/>
+                    
                 </Container>
             </>
         )
