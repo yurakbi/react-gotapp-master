@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import {Col, Row, Container} from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
 import ErrorMessage from '../errorMessage';
 import ToggleButton from 'reactstrap/lib/Button';
 import CharacterPage from '../characterPage';
+import gotService from '../../services/gotService';
+
 
 export default class App extends Component {
+    gotService = new gotService();
+
     state = {
         showrandomChar: true,
         error: false

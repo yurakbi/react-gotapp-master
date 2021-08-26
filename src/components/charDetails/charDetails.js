@@ -31,6 +31,20 @@ const Er = styled.div `
     text-align: center;
     font-size: 26px;
 `
+
+const Field = ({char, field, label}) => {
+    return (
+        <List>
+            <Term>{label}</Term>
+            <span>{char[field]}</span>
+        </List>
+    )
+
+}
+
+export {
+    Field
+}
 export default class CharDetails extends Component {
     gotService = new gotService();
 
@@ -66,28 +80,18 @@ export default class CharDetails extends Component {
             return <Er> Please select a character</Er>
         }
 
-        const {name, gender, born, died, culture} = this.state.char;
+        const {char} =this.state
+        const {name} = char;
 
         return (
             <Char>
                 <H>{name}</H>
                 <UList>
-                    <List>
-                        <Term>{gender}</Term>
-                        <span>male</span>
-                    </List>
-                    <List>
-                        <Term>Born</Term>
-                        <span>{born}</span>
-                    </List>
-                    <List>
-                        <Term>Died</Term>
-                        <span>{died}</span>
-                    </List>
-                    <List>
-                        <Term>Culture</Term>
-                        <span>{culture}</span>
-                    </List>
+                   {
+                   React.Children.map(this.props.children, (child) => {
+                    return React.cloneElement(child, {char})
+                   })
+                   }
                 </UList>
             </Char>
         );
