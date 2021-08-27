@@ -4,9 +4,9 @@ import Header from '../header';
 import RandomChar from '../randomChar';
 import ErrorMessage from '../errorMessage';
 import ToggleButton from 'reactstrap/lib/Button';
-import CharacterPage from '../characterPage';
-import BooksPage from '../itemBooks/booksPage';
+import {CharacterPage, BooksItem, BooksPage, HousePage} from '../pages';
 import gotService from '../../services/gotService';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 
 export default class App extends Component {
@@ -61,6 +61,7 @@ export default class App extends Component {
                             </ToggleButton>
                         </Col>
                     </Row>
+                    
                     <CharacterPage/>
                     
                 </Container>
