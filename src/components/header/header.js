@@ -37,6 +37,9 @@ const Header = () => {
             </HeaderTitle>
             <HeaderLinks>
                 <li>
+                    <Link to='/mainpage'> Main</Link>
+                </li>
+                <li>
                     <Link to='/characters/'>Characters</Link>
                 </li>
                 <li>

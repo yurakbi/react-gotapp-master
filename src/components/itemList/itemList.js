@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import Spinner from '../spinner';
 
 import styled from 'styled-components';
@@ -19,55 +19,46 @@ const Li = styled.li`
     border-bottom: 1px solid rgba(0, 0, 0, 0.125);
     
 `
-export default class ItemList extends Component {
+function ItemList({getData, onItemSelected, renderItem}) {
 
-    state = {
-        itemList: null,
-    }
-    
-    componentDidMount() {
-        const {getData} = this.props;
-
+    const [itemList, updateList] = useState([]);
+  
+    useEffect(() => {
         getData()
-            .then((itemList) => {
-                this.setState ({
-                    itemList
-                })
+            .then((data) => {
+                updateList(data)
             })
-    }
+    }, [])
+    
 
-    renderItems(arr) {
+
+    function renderItems(arr) {
         return arr.map((item) => {
             const {id} = item;
-            const label = this.props.renderItem(item);
+            const label = renderItem(item);
 
             return (
                 <Li
                     key={id}
-                    onClick={() => this.props.onItemSelected(id)}>
+                    onClick={() => onItemSelected(id)}>
                     {label}
                 </Li>
             )
         })
+    }        
+
+    if(!itemList) {
+        return <Spinner/>
     }
 
-    render() {
-        const {itemList} = this.state;
+    const items = renderItems(itemList);
 
-        
-
-        if(!itemList) {
-            return <Spinner/>
-        }
-
-        const items = this.renderItems(itemList);
-
-        return (
-            <Char>
-                <Ul>
-                 {items}
-                </Ul>
-            </Char>
-        );  
-    }
+    return (
+        <Char>
+            <Ul>
+             {items}
+            </Ul>
+        </Char>
+    );  
 }
+export default ItemList;
